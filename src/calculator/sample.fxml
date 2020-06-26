@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<?import java.net.URL?>
+<VBox prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="calculator.Controller">
+    <stylesheets>
+        <URL value="@/css/style.css"/>
+    </stylesheets>
+
+    <children>
+        <TextField fx:id="resultTextField"/>
+        <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <right>
+                <VBox prefHeight="200.0" prefWidth="35.0">
+                    <children>
+                        <Button alignment="CENTER" prefHeight="35.0" prefWidth="35.0" text="+" VBox.vgrow="ALWAYS"
+                                onAction="#btnPlusClick"/>
+                        <Button alignment="CENTER" prefHeight="35.0" prefWidth="35.0" text="-" VBox.vgrow="ALWAYS"
+                                onAction="#btnMinusClick"/>
+                        <Button alignment="CENTER" prefHeight="35.0" prefWidth="35.0" text="*" VBox.vgrow="ALWAYS"
+                                onAction="#btnMultClick"/>
+                        <Button alignment="CENTER" prefHeight="35.0" prefWidth="35.0" text="/" VBox.vgrow="ALWAYS"
+                                onAction="#btnDivideClick"/>
+                        <Button fx:id="btnEquals" alignment="CENTER" prefHeight="35.0" prefWidth="35.0" text="=" VBox.vgrow="ALWAYS"
+                                onAction="#btnEqualsClick"/>
+                    </children>
+                </VBox>
+            </right>
+
+            <top>
+                <TextField fx:id="computeTextField" BorderPane.alignment="CENTER" />
+            </top>
+
+            <center>
+                <GridPane alignment="CENTER" >
+                    <Button fx:id="btn1" prefHeight="70.0" prefWidth="70.0" text="1" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                            GridPane.vgrow="ALWAYS" onAction="#buttonClick" />
+                    <Button fx:id="btn2" prefHeight="70.0" prefWidth="70.0" text="2" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS"
+                            onAction="#buttonClick"/>
+                    <Button fx:id="btn3" prefHeight="70.0" prefWidth="70.0" text="3" GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS"
+                            onAction="#buttonClick"/>
+                    <Button fx:id="btn4" prefHeight="70.0" prefWidth="70.0" text="4" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"
+                            onAction="#buttonClick"/>
+                    <Button fx:id="btn5" prefHeight="70.0" prefWidth="70.0" text="5" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"
+                            onAction="#buttonClick"/>
+                    <Button fx:id="btn6" prefHeight="70.0" prefWidth="70.0" text="6" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"
+                            onAction="#buttonClick"/>
+                    <Button fx:id="btn7" prefHeight="70.0" prefWidth="70.0" text="7" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"
+                            onAction="#buttonClick"/>
+                    <Button fx:id="btn8" prefHeight="70.0" prefWidth="70.0" text="8" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"
+                            onAction="#buttonClick"/>
+                    <Button fx:id="btn9" prefHeight="70.0" prefWidth="70.0" text="9" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"
+                            onAction="#buttonClick"/>
+                    <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                    </rowConstraints>
+                </GridPane>
+            </center>
+
+            <left>
+
+            </left>
+        </BorderPane>
+    </children>
+</VBox>
