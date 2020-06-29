@@ -1,0 +1,28 @@
+#buttonSend {
+    -fx-background-color: #33DAFF;
+    -fx-border-color: #A833FF;
+    -fx-border-radius: 5px;
+}
+
+#buttonSend:hover {
+    -fx-background-color: #99FF33;
+}
+
+#textField {
+    -fx-border-color: #A833FF;
+    -fx-border-radius: 5px;
+}
+
+#textField:hover {
+    -fx-border-color: #99FF33;
+    -fx-border-radius: 5px;
+}
+
+.text-area {
+    -fx-border-color: #A833FF;
+    -fx-border-radius: 5px;
+}
+
+.text-area .content {
+    -fx-background-color: #D6EAF8;
+}
