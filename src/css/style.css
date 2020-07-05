@@ -8,12 +8,22 @@
     -fx-background-color: #99FF33;
 }
 
-#textField {
+#buttonEnter {
+    -fx-background-color: #F1C40F;
+    -fx-border-color: #A833FF;
+    -fx-border-radius: 6px;
+}
+
+#buttonEnter:hover {
+    -fx-background-color: #C4F10F;
+}
+
+.text-field {
     -fx-border-color: #A833FF;
     -fx-border-radius: 5px;
 }
 
-#textField:hover {
+.text-field:hover {
     -fx-border-color: #99FF33;
     -fx-border-radius: 5px;
 }
