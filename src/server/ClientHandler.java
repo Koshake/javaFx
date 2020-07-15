@@ -1,9 +1,13 @@
 package server;
 
+import javafx.application.Platform;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 public class ClientHandler {
     Server server;
@@ -23,11 +27,16 @@ public class ClientHandler {
             final String AUTH = "/auth ";
             final  String AUTH_OK = "/authok ";
             final String PRIVAT_MSG = "/w ";
+            final String END = "/end";
+            final String REG = "/reg ";
+            final String REG_RESULT = "/regresult ";
             final int AUTH_WORDS_COUNT = 3;
             final int PRIVATE_WORDS_COUNT = 3;
+            final  int TIMEOUT = 120000;
 
             new Thread(() -> {
                 try {
+                    socket.setSoTimeout(TIMEOUT);
                     //цикл аутентификации
                     while (true) {
                         String str = in.readUTF();
@@ -40,40 +49,60 @@ public class ClientHandler {
                             String newNick = server
                                     .getAuthService()
                                     .getNicknameByLoginAndPassword(token[1], token[2]);
+                            login = token[1];
                             if (newNick != null) {
-                                sendMsg(AUTH_OK + newNick);
-                                nick = newNick;
-                                login = token[1];
-                                server.subscribe(this);
-                                System.out.printf("Клиент %s подключился \n", nick);
-                                break;
+                                if(!server.isLoginAuthorized(login)) {
+
+                                    sendMsg(AUTH_OK + newNick);
+                                    nick = newNick;
+
+                                    server.subscribe(this);
+                                    System.out.printf("Клиент %s подключился \n", nick);
+                                    socket.setSoTimeout(0);
+                                    break;
+                                } else {
+                                    sendMsg("С этим логином уже авторизовались!");
+                                }
                             } else {
                                 sendMsg("Неверный логин / пароль");
                             }
                         }
-                        server.broadcastMsg(nick, str);
+
+                        if (str.startsWith(REG)) {
+                            String[] token = str.split("\\s");
+                            if (token.length < 4) {
+                                continue;
+                            }
+                            boolean b = server.getAuthService().registration(token[1], token[2], token[3]);
+                            if (b) {
+                                sendMsg(REG_RESULT + "ok");
+                            } else {
+                                sendMsg(REG_RESULT + "failed");
+                            }
+                        }
                     }
                     //цикл работы
-                    while (true) {
+                    while (!socket.isClosed()) {
                         String str = in.readUTF();
 
                         if(str.startsWith(PRIVAT_MSG)) {
-                            String[] token = str.split("\\s");
+                            String[] token = str.split("\\s", 3);
                             if (token.length < PRIVATE_WORDS_COUNT) {
                                 continue;
                             }
 
-                            server.sendMsgByNick(nick, token[1], token[2]);
-                            sendMsg(nick, token[2]);
+                            server.privateMsg(this, token[1], token[2]);
                             continue;
                         }
-                        if (str.equals("/end")) {
-                            out.writeUTF("/end");
+                        if (str.equals(END)) {
+                            out.writeUTF(END);
                             break;
                         }
 
-                        server.broadcastMsg(nick, str);
+                        server.broadcastMsg(this, str);
                     }
+                } catch (SocketTimeoutException e) {
+                    sendMsg(END);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -106,16 +135,12 @@ public class ClientHandler {
         }
     }
 
-    void sendMsg(String name, String str) {
-        try {
-            out.writeUTF(name + ": " + str);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public String getNick() {
         return nick;
+    }
+
+    public  String getLogin() {
+        return login;
     }
 
 }

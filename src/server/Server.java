@@ -45,26 +45,56 @@ public class Server {
         }
     }
 
-    void broadcastMsg(String from, String msg){
+    void broadcastMsg(ClientHandler sender, String msg) {
+        String message = String.format("%s : %s", sender.getNick(), msg);
+
         for (ClientHandler client : clients) {
-            client.sendMsg(from, msg);
+            client.sendMsg(message);
         }
     }
 
-    void sendMsgByNick(String from, String to, String msg) {
+    void broadcastClientList() {
+        StringBuilder sb = new StringBuilder("/clientlist ");
         for (ClientHandler client : clients) {
-            if (client.getNick().equals(to)) {
-                client.sendMsg(from, msg);
+            sb.append(client.getNick()).append(" ");
+        }
+        String msg = sb.toString();
+        for (ClientHandler client : clients) {
+            client.sendMsg(msg);
+        }
+    }
+
+    void privateMsg(ClientHandler sender, String receiver, String msg) {
+        String message = String.format("[%s] private [%s] : %s", sender.getNick(), receiver, msg);
+
+        for (ClientHandler c : clients) {
+            if(c.getNick().equals(receiver)){
+                c.sendMsg(message);
+                if (!sender.getNick().equals(receiver))
+                    sender.sendMsg(message);
+                return;
             }
         }
+        sender.sendMsg(String.format("Client %s not found", receiver));
     }
 
     public void subscribe(ClientHandler clientHandler) {
         clients.add(clientHandler);
+        broadcastClientList();
     }
 
     public void unsubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);
+        broadcastClientList();
+    }
+
+    public boolean isLoginAuthorized(String login) {
+        for (ClientHandler client : clients) {
+            if (client.getLogin().equals(login)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
